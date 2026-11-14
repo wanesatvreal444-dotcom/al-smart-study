@@ -33,7 +33,7 @@
 <p class="muted" id="syllabusSource"></p>
 </section>
 <section class="panel"><h2>නිල අධ්‍යාපන මූලාශ්‍ර</h2>
-<p><a href="https://www.nie.lk/pdffiles/tg/eALSyl%20Political.pdf" target="_blank">NIE – දේශපාලන විද්‍යාව (2017)</a></p>
+<p><a href="https://nie.lk/pdffiles/tg/12_13_Sinhala_Syllabus_new.pdf" target="_blank">NIE – සිංහල (2017)</a></p><p><a href="https://www.nie.lk/pdffiles/tg/eALSyl%20Political.pdf" target="_blank">NIE – දේශපාලන විද්‍යාව (2017)</a></p>
 <p><a href="https://www.nie.lk/pdffiles/tg/eGr13TG%20Geography.pdf" target="_blank">NIE – භූගෝල විද්‍යාව 13 ශ්‍රේණිය (2018)</a></p>
 <p><a href="https://doenets.lk/evaluationreports" target="_blank">විභාග දෙපාර්තමේන්තුව – ප්‍රශ්න පත්‍ර සහ ලකුණු දීමේ පටිපාටි</a></p>
 <p class="muted">PDF සහ සබැඳි විවෘත කිරීමට අන්තර්ජාලය අවශ්‍යයි.</p></section>
@@ -94,7 +94,7 @@ political:{intro:"NIE දේශපාලන විද්‍යාව 12–13 ශ
 quiz:[["දේශපාලන ක්‍රියාවලීන් ක්‍රමානුකූලව අධ්‍යයනය කරන විෂයය කුමක්ද?",["භූගෝල විද්‍යාව","දේශපාලන විද්‍යාව","ජීව විද්‍යාව"],1,"දේශපාලන විද්‍යාව දේශපාලන ක්‍රියාවලීන් හා ආයතන අධ්‍යයනය කරයි."],["ෆෙඩරල් රාජ්‍යයක බලතල බෙදාහැරීම තහවුරු කරන්නේ කුමකින්ද?",["ව්‍යවස්ථාවෙන්","එක් පුද්ගලයකුගේ කැමැත්තෙන්","අවිධිමත් සම්ප්‍රදායෙන් පමණක්"],0,"මධ්‍යම හා ප්‍රාන්ත මට්ටමේ බලතල ව්‍යවස්ථාවෙන් වෙන් කර ඇත."]]}}
 function renderCourse(){
  const c=course[$('subject').value],key='alprogress:'+ $('year').value+':'+$('subject').value,done=JSON.parse(localStorage.getItem(key)||'{}');
- $('lessonIntro').textContent=c.intro+' | තෝරාගත් වසර: '+$('year').value;
+ $('lessonIntro').textContent=c.intro+' | තෝරාගත් වසර: '+$('year').value;$('syllabusIntro').textContent=c.intro;$('syllabusSource').textContent='NIE නිල විෂය නිර්දේශය: '+({sinhala:'https://nie.lk/pdffiles/tg/12_13_Sinhala_Syllabus_new.pdf',geography:'https://nie.lk/pdffiles/tg/eGr13TG%20Geography.pdf',political:'https://www.nie.lk/pdffiles/tg/eALSyl%20Political.pdf'}[$('subject').value]);$('topics').innerHTML=c.lessons.map((l,i)=>'<p><b>'+l[0]+'</b> – '+l[1]+'</p>').join('');
  $('lessonList').innerHTML=c.lessons.map((l,i)=>'<article style="border:1px solid #dbe3eb;border-radius:10px;padding:12px;margin:10px 0"><h3>'+l[0]+'</h3><p class="muted">'+l[1]+'</p>'+l[2].map(n=>'<p>'+n+'</p>').join('')+'<p><b>ස්වයං අධ්‍යයන කාර්යය:</b> '+l[3]+'</p><label><input type="checkbox" data-lesson="'+i+'" style="width:auto" '+(done[i]?'checked':'')+'> පාඩම සම්පූර්ණයි</label></article>').join('');
  $('lessonList').querySelectorAll('[data-lesson]').forEach(x=>x.addEventListener('change',()=>{const d=JSON.parse(localStorage.getItem(key)||'{}');d[x.dataset.lesson]=x.checked;localStorage.setItem(key,JSON.stringify(d))}));
  $('quizArea').innerHTML=c.quiz.map((q,i)=>'<article style="border-top:1px solid #dbe3eb;padding:12px 0"><b>'+(i+1)+'. '+q[0]+'</b>'+q[1].map((a,j)=>'<label style="font-weight:400"><input type="radio" name="q'+i+'" value="'+j+'" style="width:auto"> '+a+'</label>').join('')+'<button type="button" class="secondary" data-check="'+i+'">පිළිතුර පරීක්ෂා කරන්න</button><p id="qr'+i+'" class="muted"></p></article>').join('');
