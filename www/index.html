@@ -108,7 +108,7 @@ $('year').addEventListener('change',()=>{load();renderTopics();renderCourse()});
 $('save').addEventListener('click',()=>{localStorage.setItem(key(),$('notes').value);$('saved').textContent='සටහන් සුරැකුණා.';updateCount()});
 $('backup').addEventListener('click',()=>{const data={app:'A/L Smart Study',version:1,notes:{}};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.startsWith('alnotes:'))data.notes[k]=localStorage.getItem(k)}const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='al-smart-study-backup.json';a.click();URL.revokeObjectURL(a.href)});
 $('restoreFile').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{const data=JSON.parse(await f.text());if(!data.notes||typeof data.notes!=='object')throw Error('Invalid backup');for(const [k,v] of Object.entries(data.notes)){if(k.startsWith('alnotes:')&&typeof v==='string')localStorage.setItem(k,v)}load();$('saved').textContent='Backup දත්ත නැවත ලබාගත්තා.'}catch(err){alert('Backup ගොනුව කියවිය නොහැක.')}e.target.value=''});
-load();
+load();renderCourse();
 </script>
 </body>
 </html>
