@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="si">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#123b63">
+  <title>A/L Smart Study</title>
+  <style>
+    :root{font-family:system-ui,"Noto Sans Sinhala",sans-serif;color:#172b3a;background:#f3f6fa}
+    *{box-sizing:border-box}body{margin:0}header{background:#123b63;color:white;padding:22px 18px}
+    h1{font-size:1.45rem;margin:0 0 6px}header p{margin:0;opacity:.9}
+    main{max-width:760px;margin:auto;padding:16px}.panel{background:white;border-radius:14px;padding:16px;margin:0 0 14px;box-shadow:0 2px 12px #17324d12}
+    label{display:block;font-weight:650;margin:10px 0 6px}select,input,textarea,button{font:inherit;width:100%;padding:11px;border:1px solid #cbd5df;border-radius:9px;background:white}
+    textarea{min-height:140px;resize:vertical}button{background:#145a8d;color:white;border:0;font-weight:700;margin-top:10px}
+    button.secondary{background:#e8f0f7;color:#123b63}.muted{color:#586b7a;font-size:.92rem}.notice{background:#fff7df;border-left:4px solid #d99b20;padding:12px;border-radius:8px}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{font-size:1.4rem;font-weight:750;color:#145a8d}
+    @media(max-width:480px){.row{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<header><h1>A/L Smart Study</h1><p>2026 • 2027 • 2028 | ඔබේ අධ්‍යයන සහකරු</p></header>
+<main>
+  <section class="panel">
+    <h2>අධ්‍යයන වර්ෂය සහ විෂය</h2>
+    <div class="row">
+      <div><label for="year">A/L වර්ෂය</label><select id="year"><option>2026</option><option>2027</option><option>2028</option></select></div>
+      <div><label for="subject">විෂය</label><select id="subject"><option value="sinhala">සිංහල</option><option value="geography">භූගෝල විද්‍යාව</option><option value="political">දේශපාලන විද්‍යාව</option></select></div>
+    </div>
+  </section>
+  <section class="panel">
+    <h2>මගේ සටහන්</h2>
+    <label for="notes">පාඩම් සටහන්</label>
+    <textarea id="notes" placeholder="ඔබේ සටහන් මෙහි ලියන්න..."></textarea>
+    <button id="save">සටහන් සුරකින්න</button>
+    <p class="muted" id="saved" aria-live="polite">සටහන් මෙම දුරකථනයේ පමණක් සුරැකේ.</p>
+  </section>
+  <section class="panel">
+    <h2>පසුගිය විභාග ප්‍රශ්න පත්‍ර</h2>
+    <label for="paperYear">විභාග වර්ෂය</label>
+    <select id="paperYear"></select>
+    <p class="notice">නිල ප්‍රශ්න පත්‍ර සහ පිළිතුරු පරීක්ෂා කර එකතු කරන තුරු මෙහි අන්තර්ගතය හිස්ව පවතී. තහවුරු නොකළ ප්‍රශ්න හෝ පිළිතුරු නිල ලෙස පෙන්වන්නේ නැත.</p>
+  </section>
+  <section class="panel">
+    <h2>Backup / Restore</h2>
+    <button class="secondary" id="backup">JSON Backup බාගන්න</button>
+    <label for="restoreFile">Backup ගොනුවෙන් නැවත ලබාගන්න</label>
+    <input id="restoreFile" type="file" accept="application/json,.json">
+    <p class="muted">ඔබේ සටහන් backup ගොනුවක සුරකින්න. App එක මකා දැමීමට හෝ දත්ත මාරු කිරීමට පෙර backup එකක් තබාගන්න.</p>
+  </section>
+  <section class="panel">
+    <h2>ප්‍රගතිය</h2>
+    <div class="stat" id="noteCount">0</div><p class="muted">සුරැකි සටහන් කට්ටල</p>
+  </section>
+  <section class="panel">
+    <h2>වැදගත් දැනුම්දීම</h2>
+    <p class="notice">මෙය ආරම්භක App සැකිල්ලකි. සම්පූර්ණ විෂය නිර්දේශ, පාඩම්, ප්‍රශ්න පත්‍ර, නිල පිළිතුරු සහ ලකුණු දීමේ ක්‍රම තවම ඇතුළත් කර නැත. ඒවා NIE සහ විභාග දෙපාර්තමේන්තුවේ නිල මූලාශ්‍ර සමඟ තහවුරු කර පසුව එක් කළ යුතුය.</p>
+  </section>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+for(let y=2026;y>=2007;y--){const o=document.createElement('option');o.value=y;o.textContent=y;$('paperYear').append(o)}
+const key=()=> 'alnotes:'+ $('year').value+':'+$('subject').value;
+function load(){ $('notes').value=localStorage.getItem(key())||''; updateCount(); }
+function updateCount(){let n=0;for(let i=0;i<localStorage.length;i++){if(localStorage.key(i).startsWith('alnotes:'))n++}$('noteCount').textContent=n}
+$('year').addEventListener('change',load);$('subject').addEventListener('change',load);
+$('save').addEventListener('click',()=>{localStorage.setItem(key(),$('notes').value);$('saved').textContent='සටහන් සුරැකුණා.';updateCount()});
+$('backup').addEventListener('click',()=>{const data={app:'A/L Smart Study',version:1,notes:{}};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.startsWith('alnotes:'))data.notes[k]=localStorage.getItem(k)}const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='al-smart-study-backup.json';a.click();URL.revokeObjectURL(a.href)});
+$('restoreFile').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{const data=JSON.parse(await f.text());if(!data.notes||typeof data.notes!=='object')throw Error('Invalid backup');for(const [k,v] of Object.entries(data.notes)){if(k.startsWith('alnotes:')&&typeof v==='string')localStorage.setItem(k,v)}load();$('saved').textContent='Backup දත්ත නැවත ලබාගත්තා.'}catch(err){alert('Backup ගොනුව කියවිය නොහැක.')}e.target.value=''});
+load();
+</script>
+</body>
+</html>
