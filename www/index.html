@@ -28,6 +28,16 @@
     </div>
   </section>
   <section class="panel">
+<h2>නිල විෂය නිර්දේශය සහ පාඩම් මාතෘකා</h2>
+<p class="muted" id="syllabusIntro"></p><div id="topics"></div>
+<p class="muted" id="syllabusSource"></p>
+</section>
+<section class="panel"><h2>නිල අධ්‍යාපන මූලාශ්‍ර</h2>
+<p><a href="https://www.nie.lk/pdffiles/tg/eALSyl%20Political.pdf" target="_blank">NIE – දේශපාලන විද්‍යාව (2017)</a></p>
+<p><a href="https://www.nie.lk/pdffiles/tg/eGr13TG%20Geography.pdf" target="_blank">NIE – භූගෝල විද්‍යාව 13 ශ්‍රේණිය (2018)</a></p>
+<p><a href="https://doenets.lk/evaluationreports" target="_blank">විභාග දෙපාර්තමේන්තුව – ප්‍රශ්න පත්‍ර සහ ලකුණු දීමේ පටිපාටි</a></p>
+<p class="muted">PDF සහ සබැඳි විවෘත කිරීමට අන්තර්ජාලය අවශ්‍යයි.</p></section>
+<section class="panel">
     <h2>මගේ සටහන්</h2>
     <label for="notes">පාඩම් සටහන්</label>
     <textarea id="notes" placeholder="ඔබේ සටහන් මෙහි ලියන්න..."></textarea>
@@ -58,11 +68,18 @@
 </main>
 <script>
 const $=id=>document.getElementById(id);
+const topics={
+political:{intro:"NIE නිල විෂය නිර්දේශය: 12 සහ 13 ශ්‍රේණි, 2017 සිට ක්‍රියාත්මක. 2026/2027/2028 සඳහා වෙනම නව සංස්කරණයක් බව මෙහි තහවුරු කර නැත.",source:"NIE PDF: eALSyl Political Science (2017)",items:["දේශපාලනය සහ දේශපාලන විද්‍යාව","දේශපාලන විද්‍යාවේ තේමා","රාජ්‍යය, ස්වෛරීභාවය සහ පුරවැසිභාවය","ආණ්ඩු ආකෘති – ඒකීය, ෆෙඩරල්, සන්ධීය සහ විධායක ආකෘති","දේශපාලන දෘෂ්ටිවාද","ගැටුම්, ගැටුම් නිරාකරණය සහ සාම ගොඩනැගීම","ශ්‍රී ලංකාවේ යටත්විජිත පරිවර්තනය","1947 සහ 1972 ආණ්ඩුක්‍රම ව්‍යවස්ථා","ප්‍රජාතන්ත්‍රවාදී පාලනය","සමකාලීන ආණ්ඩු ආකෘති – ඇමරිකාව, ඉන්දියාව, ස්විට්සර්ලන්තය, බ්‍රිතාන්‍යය, ශ්‍රී ලංකාව, ප්‍රංශය","රාජ්‍ය ප්‍රතිපත්ති සහ දේශපාලන ක්‍රියාවලිය","1978 ආණ්ඩුක්‍රම ව්‍යවස්ථාව සහ සංශෝධන","ශ්‍රී ලංකාවේ දේශපාලන පක්ෂ ක්‍රමය","ජාතික සහ ජාත්‍යන්තර දේශපාලනය","ශ්‍රී ලංකාවේ විදේශ ප්‍රතිපත්තිය"]},
+geography:{intro:"NIE 13 ශ්‍රේණි ගුරු මාර්ගෝපදේශය (2018) අනුව තහවුරු කළ මාතෘකා. මෙය 13 ශ්‍රේණි කොටස පමණි; සම්පූර්ණ 12/13 විෂය නිර්දේශය නොවේ.",source:"NIE PDF: Geography Grade 13 Teachers' Guide (2018)",items:["දේශගුණික විපර්යාස","ජල සම්පත් සහ ජල සංරක්ෂණය","ශ්‍රී ලංකාවේ ජල සම්පත්","ජෛව කලාප සහ පාරිසරික පද්ධති","ස්වාභාවික උපද්‍රව සහ ආපදා","ශ්‍රී ලංකාවේ ආපදා කළමනාකරණය","ජාත්‍යන්තර සහ කලාපීය සංවිධාන","පතල් කර්මාන්තය","ශ්‍රී ලංකාවේ ඛනිජ සම්පත්","නිෂ්පාදන කර්මාන්ත","ශ්‍රී ලංකාවේ සංචාරක කර්මාන්තය","ගෝලීයකරණය","භූගෝලීය දත්ත"]},
+sinhala:{intro:"සිංහල විෂය සඳහා අදාළ නිල NIE ලේඛනය තවම තහවුරු කර නැත. එබැවින් අනුමාන පාඩම් ලැයිස්තුවක් ඇතුළත් කර නැත.",source:"නිල මූලාශ්‍රය තහවුරු වූ පසු එක් කරනු ඇත.",items:["නිල විෂය නිර්දේශය තහවුරු වන තුරු මෙහි පාඩම් අන්තර්ගතයක් නොමැත."]}
+};
+function renderTopics(){const s=topics[$('subject').value];$('syllabusIntro').textContent=s.intro;$('syllabusSource').textContent=s.source;const k='altopics:'+ $('year').value+':'+$('subject').value;const d=JSON.parse(localStorage.getItem(k)||'{}');$('topics').innerHTML=s.items.map((v,i)=>'<label style="display:block;background:#f3f6fa;padding:9px;border-radius:8px"><input type="checkbox" data-i="'+i+'" style="width:auto" '+(d[i]?'checked':'')+'> '+v+'</label>').join('');$('topics').querySelectorAll('input').forEach(x=>x.addEventListener('change',()=>{const z=JSON.parse(localStorage.getItem(k)||'{}');z[x.dataset.i]=x.checked;localStorage.setItem(k,JSON.stringify(z))}));}
+
 for(let y=2026;y>=2007;y--){const o=document.createElement('option');o.value=y;o.textContent=y;$('paperYear').append(o)}
 const key=()=> 'alnotes:'+ $('year').value+':'+$('subject').value;
 function load(){ $('notes').value=localStorage.getItem(key())||''; updateCount(); }
 function updateCount(){let n=0;for(let i=0;i<localStorage.length;i++){if(localStorage.key(i).startsWith('alnotes:'))n++}$('noteCount').textContent=n}
-$('year').addEventListener('change',load);$('subject').addEventListener('change',load);
+$('year').addEventListener('change',()=>{load();renderTopics()});$('subject').addEventListener('change',()=>{load();renderTopics()});
 $('save').addEventListener('click',()=>{localStorage.setItem(key(),$('notes').value);$('saved').textContent='සටහන් සුරැකුණා.';updateCount()});
 $('backup').addEventListener('click',()=>{const data={app:'A/L Smart Study',version:1,notes:{}};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.startsWith('alnotes:'))data.notes[k]=localStorage.getItem(k)}const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='al-smart-study-backup.json';a.click();URL.revokeObjectURL(a.href)});
 $('restoreFile').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{const data=JSON.parse(await f.text());if(!data.notes||typeof data.notes!=='object')throw Error('Invalid backup');for(const [k,v] of Object.entries(data.notes)){if(k.startsWith('alnotes:')&&typeof v==='string')localStorage.setItem(k,v)}load();$('saved').textContent='Backup දත්ත නැවත ලබාගත්තා.'}catch(err){alert('Backup ගොනුව කියවිය නොහැක.')}e.target.value=''});
